@@ -544,11 +544,126 @@ All files             |   90.91 |       75 |   82.14 |   89.66 |
 
 El ejercicio consistia en aplicar un patron de diseño que se adecue mas para la creacion de un programa que simule la compra de productos con diferentes metodos de pago, dependiendo de estos se aplicaria una comision diferente sobre el precio.
 
-Use el patron de comportamiento strategy ya que este permite definir una familia de algoritmos donde cada uno es una clase independiente, estas clases serian los metodos de pago y la clase contexto de la cual se aplica este patron seria 
+Use el patron de comportamiento strategy ya que este permite definir una familia de algoritmos donde cada uno es una clase independiente, estas clases serian los metodos de pago y la clase contexto de la cual se aplica este patron seria una de productos.
 
-El patrón de comportamiento Strategy permite definir una familia de algoritmos, cada uno de ellos en una clase independiente, de manera que los diferentes objetos de esas clases sean intercambiables.
+De esta forma, por cada metodo de pago se crearia un claculo de comision diferente y no cambiara la logica de los demas metodos de pago, haciendo posible la creacion de nuevos metodos de pago a futuro de forma independiente.
 
-Generalmente, el patrón es aplicable cuando se dispone de una clase, denominada contexto, que lleva a cabo una funcionalidad específica de maneras diferentes como, por ejemplo, aplicar diferentes métodos de ordenación a una colección o resolver un problema de optimización mediante diferentes tipos de técnicas algorítmicas:
+## Clases y interfaces
+### Producto
+~~~ ts
+import {Comision} from "./Comision_Interface";
 
-Strategy propone extraer cada uno de esos algoritmos del contexto para incluirlos en clases independientes denominadas estrategias. En este punto cabe mencionar que todas las estrategias deberán implementar una interfaz común. Luego, la clase contexto deberá almacenar una referencia a una estrategia, la cual recibirá desde el código cliente. También dispondrá de un setter que permitirá cambiar la estrategia aplicada en tiempo de ejecución. Teniendo en cuenta todo lo anterior, el contexto se vuelve independiente de las estrategias, de modo que se pueden añadir nuevas estrategias o modificar las ya existentes sin necesidad de modificar el contexto. Nuestro ejemplo anterior con el patrón Strategy implementado quedaría tal y como sigue:
+/**
+ * Clase para la creacion de productos.
+ */
+export class Producto {
 
+    /**
+     * 
+     * @param nombre Nombre del producto.
+     * @param precio Precio del producto.
+     * @param metodo_pago Metodo de pago que se va a usar para pagar. 
+     */
+    constructor(private nombre: string, private precio: number, private metodo_pago: Comision) {
+    }
+  
+    /**
+     * Meotodo que regresa el nombre del producto.
+     * @returns Nombre del producto.
+     */
+    getNombre() : string {
+        return this.nombre;
+    }
+
+    /**
+     * Metodo que cambia el metodo de pago con que se compra el producto.
+     * @param metodo_pago Metodo de pago a usar.
+     */
+    setMetodoPago(metodo_pago: Comision) {
+      this.metodo_pago = metodo_pago;
+    }
+  
+    /**
+     * Metodo que procede a hacer la compra, calcula la comision y devuelve el total a pagar.
+     * @returns Precio final con la comision agregada segun su metodo de pago.
+     */
+    comprar() : number {
+      return this.metodo_pago.aplicarComision(this.precio);
+    }
+  }
+~~~
+
+### Interface comision
+~~~ ts
+/**
+ * Interfaz para calcular la comision de cada metodo de pago.
+ */
+export interface Comision {
+    aplicarComision(precio: number): number;
+  }
+~~~
+
+### Ejemplos de clases que definen metodos de pago
+~~~ ts
+import {Comision} from "./Comision_Interface";
+
+/**
+ * Clase para calcular la comision del metodo de pago Visa (6.5%)
+ */
+export class Visa implements Comision {
+    /**
+     * Metodo para calcular la comision del metodo de pago Visa (6.5%)
+     * @param precio Precio del producto
+     * @returns Precio + la el resultado de la comision de 6.5%.
+     */
+    aplicarComision(precio: number) : number {
+      return precio + (precio * 0.065);
+    }
+  }
+~~~
+
+~~~ ts
+import {Comision} from "./Comision_Interface";
+
+/**
+ * Clase del metodo de pago Mastercard que implementa la interfaz comision.
+ */
+export class Mastercard implements Comision {
+    /**
+     * Metodo para calcular la comision del metodo de pago Matercard (5%)
+     * @param precio Precio del producto
+     * @returns Precio + la el resultado de la comision de 5%.
+     */
+    aplicarComision(precio: number) : number {
+      return precio + (precio * 0.05);
+    }
+  }
+~~~
+
+~~~ ts
+import {Comision} from "./Comision_Interface";
+
+/**
+ * Clase para calcular la comision del metodo de pago Paypal (3%)
+ */
+export class Paypal implements Comision {
+        /**
+     * Metodo para calcular la comision del metodo de pago Paypal (3%)
+     * @param precio Precio del producto
+     * @returns Precio + la el resultado de la comision de 3%.
+     */
+    aplicarComision(precio: number) : number {
+      return precio + (precio * 0.03)
+    }
+  }
+~~~
+
+## Conclusión
+
+En esta práctica profundizamos los conocimientos en el lenguaje Typescript aplicando patrones de diseño como el `singleton`, ademas de usar `chalks` para dar color a los mensajes de la terminal y el `yargs` para crear comandos que permitan la interaccion con el programa mediante el pase de argumentos por la terminal, el intento de seguir usando los principios SOLID y el mantenimiento del codigo con los `actions` de github programados para funcionar con `coveralls`, las `pruebas unitarias` y `sonarcloud`. 
+
+# Bibliografía
+- [Guión de la práctica](https://ull-esit-inf-dsi-2021.github.io/prct08-filesystem-notes-app/)
+- [Apuntes de clase](https://ull-esit-inf-dsi-2021.github.io/nodejs-theory/)
+- [Communicating using Markdown](https://lab.github.com/githubtraining/communicating-using-markdown)
+- [Que es visual studio live sahre](https://docs.microsoft.com/en-us/visualstudio/liveshare/)
