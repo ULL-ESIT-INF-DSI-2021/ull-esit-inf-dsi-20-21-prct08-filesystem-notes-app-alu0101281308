@@ -50,9 +50,9 @@ Los objetivos que deben cumplir para la aplicación de procesamiento de notas de
  El funcionamiento del programa consiste en programar en los diferentes comandos que se piden haciendo uso del yarg y asi obtener los argumentos introducidos por linea de comando.
  Con estos argumentos se crean objetos del tipo `Nota` y `Usuario` y con la instancia del `FileManager` verifico con sus metodos los requisitos que se piden para cada objetivo del comando en el que se este trabajando.
 
- ## Clases
+## Clases
 
- ### Usuario
+### Usuario
  ~~~ ts
 /**
  * Clase que gestiona todo lo relacionado a usuarios.
@@ -68,7 +68,7 @@ export class Usuario {
 }
  ~~~
 
- ### Nota
+### Nota
  ~~~ ts
  /**
  * Enumerable que posee los colores permitidos para el uso de las notas.
@@ -117,7 +117,7 @@ export class Nota {
 }
  ~~~
 
- ### FileManager
+### FileManager
  ~~~ ts
  import chalk = require("chalk");
 import * as fs from "fs";
@@ -241,7 +241,7 @@ export class FileManager {
 }
  ~~~
 
- ## Main
+## Main
 
  ~~~ ts
  import * as chalk from 'chalk';
